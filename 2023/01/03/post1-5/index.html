@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>python实现远程开机关机 | </title>
+
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "python实现远程开机关机 | "  />
+    <meta property="og:description" content= "" />
+    <meta property="og:url" content="http://example.com/2023/01/03/post1-5/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="Harlan" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="" />
+    <meta name="twitter:title" content="python实现远程开机关机 | "/>
+    <meta name="twitter:description" content=""/>
+    <script type="application/ld+json">
+        {
+            "description": "",
+            "author": { "@type": "Person", "name": "Harlan" },
+            "@type": "BlogPosting",
+            "url": "http://example.com/2023/01/03/post1-5/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://example.comundefined"
+            },
+            "name": "Harlan"
+            },
+            "headline": "python实现远程开机关机 | ",
+            "datePublished": "2023-01-03T02:11:46.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://example.com/2023/01/03/post1-5/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/"></a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-clcfm8qv50000i4wg6w7i3iil" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      python实现远程开机关机
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2023-01-03T02:11:46.000Z" itemprop="datePublished">2023-01-03</time>
+</div>
+
+            
+
+            
+            <div class="article-tag">
+                <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python%E9%BB%91%E7%A7%91%E6%8A%80/" rel="tag">python黑科技</a></li></ul>
+            </div>
+            
+
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <h3 id="本文目标"><a href="#本文目标" class="headerlink" title="本文目标"></a><strong>本文目标</strong></h3><p>1.远程开机原理<br>2.Python 远程开机代码实现<br>3.Python 关机说明</p>
+<h3 id="python开机"><a href="#python开机" class="headerlink" title="python开机"></a><strong>python开机</strong></h3><p>关于用程序来开机，是怎么做到的呢？这就是 WOL 技术 Wake-On-Lan, 利用计算机在关机或休眠状态时，网卡及主板部分仍然有微弱的供电，当然要保持电源是插上的，而且是有线连接。所以即使在关机情况下，网卡还是有一定运作能力的，可以监听计算机外部的网上广播信息，当发现特定格式的信息后就会执行开机。现在的主板基本都支持。</p>
+<p>只需要在网络适配器属性中配置下面两个选项：</p>
+<div align=center><img src="./images/1691280-448e400aac4641e8.png"><div>
+<div align=center><img src="./images/1691280-c8cd69995a19469a.png"><div>
+下图这个勾不能选上，我们要保证网卡在关机后仍有供电，如果你关机后，网口的灯不亮了，就不行了，要保持网口灯亮。
+<div align=center><img src="./images/1691280-c8cd69995a19469a.png"><div>
+这个特定数据也有个好听的名字叫 Magic Packet(魔法数据包)。一般用过 UDP 协议进行广播。端口一般是7或者9. 魔法数据包总是以"FF FF FF FF FF FF" 连续6个 "FF",后面是 MAC 地址信息，一旦网卡侦测到数据包内容，就会唤醒目标计算机。
+
+<p>我们还是来看一下代码怎么写，代码涉及到 UDP 网络编程这块，后面会专门写写网络编程这块内容。<br>此函数只需输入目标计算机的 MAC 地址即可，在局域网中（当然，如果你的计算机有公网IP，那么在公网中也是可以的）另一台计算机上运行此程序，目标计算机即可自动开机。</p>
+<p>代码如下，代码本身很短，原理也很简单：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">def wake_up(mac=&#x27;DC-4A-3E-78-3E-0A&#x27;):</span><br><span class="line">    MAC = mac</span><br><span class="line">    BROADCAST = &quot;192.168.0.255&quot;</span><br><span class="line">    if len(MAC) != 17:</span><br><span class="line">        raise ValueError(&quot;MAC address should be set as form &#x27;XX-XX-XX-XX-XX-XX&#x27;&quot;)</span><br><span class="line">    mac_address = MAC.replace(&quot;-&quot;, &#x27;&#x27;)</span><br><span class="line">    data = &#x27;&#x27;.join([&#x27;FFFFFFFFFFFF&#x27;, mac_address * 20])  # 构造原始数据格式</span><br><span class="line">    send_data = b&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">    # 把原始数据转换为16进制字节数组，</span><br><span class="line">    for i in range(0, len(data), 2):</span><br><span class="line">        send_data = b&#x27;&#x27;.join([send_data, struct.pack(&#x27;B&#x27;, int(data[i: i + 2], 16))])</span><br><span class="line">    print(send_data)</span><br><span class="line"></span><br><span class="line">    # 通过socket广播出去，为避免失败，间隔广播三次</span><br><span class="line">    try:</span><br><span class="line">        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line">        sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)</span><br><span class="line">        sock.sendto(send_data, (BROADCAST, 7))</span><br><span class="line">        time.sleep(1)</span><br><span class="line">        sock.sendto(send_data, (BROADCAST, 7))</span><br><span class="line">        time.sleep(1)</span><br><span class="line">        sock.sendto(send_data, (BROADCAST, 7))</span><br><span class="line"></span><br><span class="line">        print(&quot;Done&quot;)</span><br><span class="line">    except Exception as e:</span><br><span class="line"></span><br><span class="line">        print(e)</span><br></pre></td></tr></table></figure>
+<h3 id="python关机"><a href="#python关机" class="headerlink" title="python关机"></a><strong>python关机</strong></h3><p>关机来说相对就容易多了，网上也有很多现成的解决方案。大多数是用程序扫描邮箱，如果收到关机相关关键词的邮件，则程序自动执行关机命令。<br>另外如果只是在局域网里实现关机，或者你有公网 IP 地址的话，也可以在本地计算机起一个服务，比如用 Flask 运行在5000端口。向5000这个地址发送指令即可。<br>本机程序中需要有一条执行关机的命令即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">os.system(&#x27;shutdown -s -t 00&#x27;)</span><br></pre></td></tr></table></figure>
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<nav class="article-nav">
+  
+  
+    <a href="/2023/01/03/post1-4/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">前の記事</div>
+      <div class="article-nav-title">端口扫描工具</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">シェア</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=python实现远程开机关机 - &url=http%3A%2F%2Fexample.com%2F2023%2F01%2F03%2Fpost1-5%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=python实现远程开机关机 - &u=http%3A%2F%2Fexample.com%2F2023%2F01%2F03%2Fpost1-5%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=python实现远程开机关机 - &url=http://example.com/2023/01/03/post1-5/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-tags">
+    <div class="widget-title"><span>Tags</span></div>
+    <div class="widget-inner">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python%E5%B0%8F%E6%8A%80%E5%B7%A7/" rel="tag">Python小技巧</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E9%BB%91%E7%A7%91%E6%8A%80/" rel="tag">python黑科技</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%97%E9%80%8F%E6%8A%80%E6%9C%AF/" rel="tag">渗透技术</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2023/01/03/post1-5/">python实现远程开机关机</a>
+          </li>
+        
+          <li>
+            <a href="/2023/01/03/post1-4/">端口扫描工具</a>
+          </li>
+        
+          <li>
+            <a href="/2022/12/16/post1-3/">python 构建SSH僵尸网络</a>
+          </li>
+        
+          <li>
+            <a href="/2022/12/15/post1-2/">python 编写天气查询小工具</a>
+          </li>
+        
+          <li>
+            <a href="/2022/12/15/post-1-1/">python 如何操作word？</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+             &copy; 2023<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

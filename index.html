@@ -127,6 +127,122 @@
   
     
       <article
+id="post-post1-5"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2023/01/03/post1-5/">python实现远程开机关机</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <h3 id="本文目标"><a href="#本文目标" class="headerlink" title="本文目标"></a><strong>本文目标</strong></h3><p>1.远程开机原理<br>2.Python 远程开机代码实现<br>3.Python 关机说明</p>
+<h3 id="python开机"><a href="#python开机" class="headerlink" title="python开机"></a><strong>python开机</strong></h3><p>关于用程序来开机，是怎么做到的呢？这就是 WOL 技术 Wake-On-Lan, 利用计算机在关机或休眠状态时，网卡及主板部分仍然有微弱的供电，当然要保持电源是插上的，而且是有线连接。所以即使在关机情况下，网卡还是有一定运作能力的，可以监听计算机外部的网上广播信息，当发现特定格式的信息后就会执行开机。现在的主板基本都支持。</p>
+<p>只需要在网络适配器属性中配置下面两个选项：</p>
+<div align=center><img src="./images/1691280-448e400aac4641e8.png"><div>
+<div align=center><img src="./images/1691280-c8cd69995a19469a.png"><div>
+下图这个勾不能选上，我们要保证网卡在关机后仍有供电，如果你关机后，网口的灯不亮了，就不行了，要保持网口灯亮。
+<div align=center><img src="./images/1691280-c8cd69995a19469a.png"><div>
+这个特定数据也有个好听的名字叫 Magic Packet(魔法数据包)。一般用过 UDP 协议进行广播。端口一般是7或者9. 魔法数据包总是以"FF FF FF FF FF FF" 连续6个 "FF",后面是 MAC 地址信息，一旦网卡侦测到数据包内容，就会唤醒目标计算机。
+
+<p>我们还是来看一下代码怎么写，代码涉及到 UDP 网络编程这块，后面会专门写写网络编程这块内容。<br>此函数只需输入目标计算机的 MAC 地址即可，在局域网中（当然，如果你的计算机有公网IP，那么在公网中也是可以的）另一台计算机上运行此程序，目标计算机即可自动开机。</p>
+<p>代码如下，代码本身很短，原理也很简单：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">def wake_up(mac=&#x27;DC-4A-3E-78-3E-0A&#x27;):</span><br><span class="line">    MAC = mac</span><br><span class="line">    BROADCAST = &quot;192.168.0.255&quot;</span><br><span class="line">    if len(MAC) != 17:</span><br><span class="line">        raise ValueError(&quot;MAC address should be set as form &#x27;XX-XX-XX-XX-XX-XX&#x27;&quot;)</span><br><span class="line">    mac_address = MAC.replace(&quot;-&quot;, &#x27;&#x27;)</span><br><span class="line">    data = &#x27;&#x27;.join([&#x27;FFFFFFFFFFFF&#x27;, mac_address * 20])  # 构造原始数据格式</span><br><span class="line">    send_data = b&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">    # 把原始数据转换为16进制字节数组，</span><br><span class="line">    for i in range(0, len(data), 2):</span><br><span class="line">        send_data = b&#x27;&#x27;.join([send_data, struct.pack(&#x27;B&#x27;, int(data[i: i + 2], 16))])</span><br><span class="line">    print(send_data)</span><br><span class="line"></span><br><span class="line">    # 通过socket广播出去，为避免失败，间隔广播三次</span><br><span class="line">    try:</span><br><span class="line">        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line">        sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)</span><br><span class="line">        sock.sendto(send_data, (BROADCAST, 7))</span><br><span class="line">        time.sleep(1)</span><br><span class="line">        sock.sendto(send_data, (BROADCAST, 7))</span><br><span class="line">        time.sleep(1)</span><br><span class="line">        sock.sendto(send_data, (BROADCAST, 7))</span><br><span class="line"></span><br><span class="line">        print(&quot;Done&quot;)</span><br><span class="line">    except Exception as e:</span><br><span class="line"></span><br><span class="line">        print(e)</span><br></pre></td></tr></table></figure>
+<h3 id="python关机"><a href="#python关机" class="headerlink" title="python关机"></a><strong>python关机</strong></h3><p>关机来说相对就容易多了，网上也有很多现成的解决方案。大多数是用程序扫描邮箱，如果收到关机相关关键词的邮件，则程序自动执行关机命令。<br>另外如果只是在局域网里实现关机，或者你有公网 IP 地址的话，也可以在本地计算机起一个服务，比如用 Flask 运行在5000端口。向5000这个地址发送指令即可。<br>本机程序中需要有一条执行关机的命令即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">os.system(&#x27;shutdown -s -t 00&#x27;)</span><br></pre></td></tr></table></figure>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2023-01-03T02:11:46.000Z" itemprop="datePublished">2023-01-03</time>
+</div>
+    
+    
+        <div class="article-tag">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python%E9%BB%91%E7%A7%91%E6%8A%80/" rel="tag">python黑科技</a></li></ul>
+        </div>
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
+id="post-post1-4"
+class="article article-type-post"
+>
+
+
+
+<div class="article-inner">
+    
+
+    <div class="article-body">
+    <header class="article-title">
+        <a href="/2023/01/03/post1-4/">端口扫描工具</a>
+    </header>
+    <div class="article-entry post-inner-html">
+        
+        <p>首先我们供给一台主机要进行的步骤就是对其主机端口的扫描，查看其中开放的端口。<br>我们首先创建一个TCP的全连接的扫描器。我们使用socket来创建连接器。</p>
+<h3 id="python-扫描端口开放"><a href="#python-扫描端口开放" class="headerlink" title="python 扫描端口开放"></a><strong>python 扫描端口开放</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#测试当前主机和端口是否开放，直接使用socket连接</span><br><span class="line">def connScan(host,port):</span><br><span class="line">    try:</span><br><span class="line">        connSkt = socket.socket(socket.AF_INET, socket.SOCK_STREAM) </span><br><span class="line">        connSkt.connect((host,port))</span><br><span class="line">        print(&quot;tcp open port:&quot; + str(port))</span><br><span class="line">    except:</span><br><span class="line">        print(&#x27;tcp closed:&#x27;+str(port))</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">def portScan(tgtHost, tgtPorts):    </span><br><span class="line">    try:        </span><br><span class="line">        tgtIP = socket.gethostbyname(tgtHost)  </span><br><span class="line">    except:        </span><br><span class="line">        print(&quot;[-] Cannot resolve &#x27;%s&#x27;: Unknown host&quot; % tgtHost)        </span><br><span class="line">        return   </span><br><span class="line">    try:        </span><br><span class="line">        tgtName = socket.gethostbyaddr(tgtIP)   print(&#x27;\n[+] Scan Results for: &#x27; + tgtName[0])</span><br><span class="line">    except:        </span><br><span class="line">        print(&#x27;\n[+] Scan Results for: &#x27; + tgtIP)</span><br><span class="line">    socket.setdefaulttimeout(1)    </span><br><span class="line">    for tgtPort in tgtPorts:        </span><br><span class="line">        print(&#x27;Scanning port &#x27; + str(tgtPort))        connScan(tgtHost, int(tgtPort))</span><br><span class="line">portScan(&#x27;www.baidu.com&#x27;, [80,443,3389,1433,23,445])</span><br></pre></td></tr></table></figure>
+<p>对百度的端口进行扫描尝试一下，如果不知道百度的IP地址，可以在cmd里面，ping一下<a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[+] Scan Results for: 61.135.169.125</span><br><span class="line">Scanning port 80</span><br><span class="line">tcp open port:80</span><br><span class="line">Scanning port 443</span><br><span class="line">tcp open port:443</span><br><span class="line">Scanning port 3389</span><br><span class="line">tcp closed:3389</span><br><span class="line">Scanning port 1433</span><br><span class="line">tcp closed:1433</span><br><span class="line">Scanning port 23</span><br><span class="line">tcp closed:23</span><br><span class="line">Scanning port 445</span><br><span class="line">tcp closed:445</span><br></pre></td></tr></table></figure>
+<h3 id="捕获应用标识"><a href="#捕获应用标识" class="headerlink" title="捕获应用标识"></a><strong>捕获应用标识</strong></h3><p>为了从捕获我们的目标主机的应用标识，我们必须首先插入额外的验证代码到 connScan函数中。一旦发现开放的端口，我们发送一个字符串数据到这个端 口然后等待响应。收集这些响应并推断可能会得到运行在目标主机端口上的应 用程序的一些信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#测试当前主机和端口是否开放，直接使用socket连接</span><br><span class="line">def connScan(host,port):</span><br><span class="line">    try:</span><br><span class="line">        connSkt = socket.socket(socket.AF_INET, socket.SOCK_STREAM) </span><br><span class="line">        connSkt.connect((host,port))</span><br><span class="line">        connSkt.send(&#x27;Python\r\n&#x27;)</span><br><span class="line">        results = connSkt.recv(100)</span><br><span class="line">        print(&quot;tcp open port:&quot; + str(port))</span><br><span class="line">        print(&#x27;[+] &#x27; + str(results)) </span><br><span class="line">    except:</span><br><span class="line">        print(&#x27;tcp closed:&#x27;+str(port))</span><br><span class="line">def portScan(tgtHost, tgtPorts):    </span><br><span class="line">    try:        </span><br><span class="line">        tgtIP = socket.gethostbyname(tgtHost)  </span><br><span class="line">    except:        </span><br><span class="line">        print(&quot;[-] Cannot resolve &#x27;%s&#x27;: Unknown host&quot; % tgtHost)        </span><br><span class="line">        return   </span><br><span class="line">    try:        </span><br><span class="line">        tgtName = socket.gethostbyaddr(tgtIP)       </span><br><span class="line">        print(&#x27;\n[+] Scan Results for: &#x27; + tgtName[0])</span><br><span class="line">    except:        </span><br><span class="line">        print(&#x27;\n[+] Scan Results for: &#x27; + tgtIP)</span><br><span class="line">    socket.setdefaulttimeout(1)    </span><br><span class="line">    for tgtPort in tgtPorts:        </span><br><span class="line">        print(&#x27;Scanning port &#x27; + str(tgtPort))        </span><br><span class="line">        connScan(tgtHost, int(tgtPort))</span><br><span class="line">portScan(&#x27;www.qq.com&#x27;, [22,80,443,3389,1433,23,445])</span><br></pre></td></tr></table></figure>
+<h3 id="多线程进行扫描"><a href="#多线程进行扫描" class="headerlink" title="多线程进行扫描"></a><strong>多线程进行扫描</strong></h3><p>因为每一个socket都有时间延迟，每一个socket扫描都将会耗时几秒钟，虽 然看起来无足轻重，但是如果我们扫描多个端口和主机延迟时间将迅速增大。 理想情况下，我们希望这些socket按顺序扫描。引入Python线程。线程提供 了一种同时执行的方式。在我们的扫描中利用线程，只需将 portScan()函数的迭代改一下。请注意，我们可以把每一个connScan()函数都 当做是一个线程。在迭代的过程中产生的每一个线程将在同时执行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">for tgtPort in tgtPorts:</span><br><span class="line">    print(&#x27;Scanning port &#x27; + str(tgtPort))</span><br><span class="line">    t = threading.Thread(target=connScan, args=(tgtHost,</span><br><span class="line">    int(tgtPort)))</span><br><span class="line">    t.start()</span><br></pre></td></tr></table></figure>
+<h3 id="使用namp"><a href="#使用namp" class="headerlink" title="使用namp"></a><strong>使用namp</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import nmap</span><br><span class="line">def nmapScan(tgtHost, tgtPort):</span><br><span class="line">    nmScan = nmap.PortScanner()</span><br><span class="line">    results = nmScan.scan(tgtHost, tgtPort)</span><br><span class="line">    state = results[&#x27;scan&#x27;][tgtHost][&#x27;tcp&#x27;][int(tgtPort)][&#x27;state&#x27;]</span><br><span class="line">    print(&quot; [*] &quot; + tgtHost + &quot; tcp/&quot; + tgtPort + &quot; &quot; + state)</span><br><span class="line">    nmapScan(&#x27;10.108.x.x&#x27;,&#x27;8080&#x27;)</span><br></pre></td></tr></table></figure>
+        
+    </div>
+    </div>
+
+    <div class="article-badge">
+        
+        
+    </div>
+
+</div>
+
+<footer class="article-footer">
+    <div class="article-more-info">
+    <div class="article-date">
+  <time datetime="2023-01-03T01:28:12.000Z" itemprop="datePublished">2023-01-03</time>
+</div>
+    
+    
+        <div class="article-tag">
+        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B8%97%E9%80%8F%E6%8A%80%E6%9C%AF/" rel="tag">渗透技术</a></li></ul>
+        </div>
+    
+    </div>
+</footer>
+
+</article>
+
+    
+  
+    
+      <article
 id="post-post1-3"
 class="article article-type-post"
 >
@@ -390,6 +506,14 @@ class="article article-type-post"
       <ul>
         
           <li>
+            <a href="/2023/01/03/post1-5/">python实现远程开机关机</a>
+          </li>
+        
+          <li>
+            <a href="/2023/01/03/post1-4/">端口扫描工具</a>
+          </li>
+        
+          <li>
             <a href="/2022/12/16/post1-3/">python 构建SSH僵尸网络</a>
           </li>
         
@@ -401,10 +525,6 @@ class="article article-type-post"
             <a href="/2022/12/15/post-1-1/">python 如何操作word？</a>
           </li>
         
-          <li>
-            <a href="/2022/12/12/hello-world/">测试文章</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -414,7 +534,7 @@ class="article article-type-post"
   <div class="widget-wrap widget-archive">
     <div class="widget-title"><span>Archive</span></div>
     <div class="widget-inner">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li></ul>
     </div>
   </div>
 
@@ -437,7 +557,7 @@ class="article article-type-post"
     <!-- 开源不易，请勿删除 -->
     <div class="footer-wrap">
         <div class="footer-inner"> 
-             &copy; 2022<br>
+             &copy; 2023<br>
             Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
         </div>
     </div>

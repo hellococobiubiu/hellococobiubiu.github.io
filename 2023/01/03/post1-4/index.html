@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+    <title>端口扫描工具 | </title>
+
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+
+    
+
+    <meta property="og:locale" content="en" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content= "端口扫描工具 | "  />
+    <meta property="og:description" content= "" />
+    <meta property="og:url" content="http://example.com/2023/01/03/post1-4/index.html" />
+    <meta property="og:site_name" content="" />
+    <meta property="article:author" content="Harlan" />
+    <meta property="article:publisher" content="" />
+    <meta property="og:description" content="" />
+    <meta name="twitter:title" content="端口扫描工具 | "/>
+    <meta name="twitter:description" content=""/>
+    <script type="application/ld+json">
+        {
+            "description": "",
+            "author": { "@type": "Person", "name": "Harlan" },
+            "@type": "BlogPosting",
+            "url": "http://example.com/2023/01/03/post1-4/index.html",
+            "publisher": {
+            "@type": "Organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "http://example.comundefined"
+            },
+            "name": "Harlan"
+            },
+            "headline": "端口扫描工具 | ",
+            "datePublished": "2023-01-03T01:28:12.000Z",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "http://example.com/2023/01/03/post1-4/index.html"
+            },
+            "@context": "http://schema.org"
+        }
+    </script>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<link rel="stylesheet" href="/dist/build.css?v=1654266144177.css">
+
+
+    
+<link rel="stylesheet" href="/dist/custom.css?v=1654266144177.css">
+
+
+    <script>
+        window.isPost = true
+        window.aomori = {
+            
+            
+            
+        }
+        window.aomori_logo_typed_animated = false
+        window.aomori_search_algolia = false
+
+    </script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+
+    <div class="container">
+    <header class="header">
+        <div class="header-type">
+            
+            <div class="header-type-inner">
+                
+                    <a class="header-type-title" href="/"></a>
+                
+    
+                
+            </div>
+        </div>
+        <div class="header-menu">
+            <div class="header-menu-inner">
+                
+            </div>
+            <div class="header-menu-social">
+                
+            </div>
+        </div>
+
+        <div class="header-menu-mobile">
+            <div class="header-menu-mobile-inner" id="mobile-menu-open">
+                <i class="icon icon-menu"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="header-menu-mobile-menu">
+        <div class="header-menu-mobile-menu-bg"></div>
+        <div class="header-menu-mobile-menu-wrap">
+            <div class="header-menu-mobile-menu-inner">
+                <div class="header-menu-mobile-menu-close" id="mobile-menu-close">
+                    <i class="icon icon-cross"></i>
+                </div>
+                <div class="header-menu-mobile-menu-list">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="container">
+        <div class="main">
+            <section class="inner">
+                <section class="inner-main">
+                    <div class="post">
+    <article id="post-clcfkb0sh0000gowg89zi8eu4" class="article article-type-post" itemscope
+    itemprop="blogPost">
+
+    <div class="article-inner">
+
+        
+          
+        
+        
+        
+
+        
+        <header class="article-header">
+            
+  
+    <h1 class="article-title" itemprop="name">
+      端口扫描工具
+    </h1>
+  
+
+        </header>
+        
+
+        <div class="article-more-info article-more-info-post hairline">
+
+            <div class="article-date">
+  <time datetime="2023-01-03T01:28:12.000Z" itemprop="datePublished">2023-01-03</time>
+</div>
+
+            
+
+            
+            <div class="article-tag">
+                <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B8%97%E9%80%8F%E6%8A%80%E6%9C%AF/" rel="tag">渗透技术</a></li></ul>
+            </div>
+            
+
+            
+
+        </div>
+
+        <div class="article-entry post-inner-html hairline" itemprop="articleBody">
+            <p>首先我们供给一台主机要进行的步骤就是对其主机端口的扫描，查看其中开放的端口。<br>我们首先创建一个TCP的全连接的扫描器。我们使用socket来创建连接器。</p>
+<h3 id="python-扫描端口开放"><a href="#python-扫描端口开放" class="headerlink" title="python 扫描端口开放"></a><strong>python 扫描端口开放</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#测试当前主机和端口是否开放，直接使用socket连接</span><br><span class="line">def connScan(host,port):</span><br><span class="line">    try:</span><br><span class="line">        connSkt = socket.socket(socket.AF_INET, socket.SOCK_STREAM) </span><br><span class="line">        connSkt.connect((host,port))</span><br><span class="line">        print(&quot;tcp open port:&quot; + str(port))</span><br><span class="line">    except:</span><br><span class="line">        print(&#x27;tcp closed:&#x27;+str(port))</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">def portScan(tgtHost, tgtPorts):    </span><br><span class="line">    try:        </span><br><span class="line">        tgtIP = socket.gethostbyname(tgtHost)  </span><br><span class="line">    except:        </span><br><span class="line">        print(&quot;[-] Cannot resolve &#x27;%s&#x27;: Unknown host&quot; % tgtHost)        </span><br><span class="line">        return   </span><br><span class="line">    try:        </span><br><span class="line">        tgtName = socket.gethostbyaddr(tgtIP)   print(&#x27;\n[+] Scan Results for: &#x27; + tgtName[0])</span><br><span class="line">    except:        </span><br><span class="line">        print(&#x27;\n[+] Scan Results for: &#x27; + tgtIP)</span><br><span class="line">    socket.setdefaulttimeout(1)    </span><br><span class="line">    for tgtPort in tgtPorts:        </span><br><span class="line">        print(&#x27;Scanning port &#x27; + str(tgtPort))        connScan(tgtHost, int(tgtPort))</span><br><span class="line">portScan(&#x27;www.baidu.com&#x27;, [80,443,3389,1433,23,445])</span><br></pre></td></tr></table></figure>
+<p>对百度的端口进行扫描尝试一下，如果不知道百度的IP地址，可以在cmd里面，ping一下<a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[+] Scan Results for: 61.135.169.125</span><br><span class="line">Scanning port 80</span><br><span class="line">tcp open port:80</span><br><span class="line">Scanning port 443</span><br><span class="line">tcp open port:443</span><br><span class="line">Scanning port 3389</span><br><span class="line">tcp closed:3389</span><br><span class="line">Scanning port 1433</span><br><span class="line">tcp closed:1433</span><br><span class="line">Scanning port 23</span><br><span class="line">tcp closed:23</span><br><span class="line">Scanning port 445</span><br><span class="line">tcp closed:445</span><br></pre></td></tr></table></figure>
+<h3 id="捕获应用标识"><a href="#捕获应用标识" class="headerlink" title="捕获应用标识"></a><strong>捕获应用标识</strong></h3><p>为了从捕获我们的目标主机的应用标识，我们必须首先插入额外的验证代码到 connScan函数中。一旦发现开放的端口，我们发送一个字符串数据到这个端 口然后等待响应。收集这些响应并推断可能会得到运行在目标主机端口上的应 用程序的一些信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">#测试当前主机和端口是否开放，直接使用socket连接</span><br><span class="line">def connScan(host,port):</span><br><span class="line">    try:</span><br><span class="line">        connSkt = socket.socket(socket.AF_INET, socket.SOCK_STREAM) </span><br><span class="line">        connSkt.connect((host,port))</span><br><span class="line">        connSkt.send(&#x27;Python\r\n&#x27;)</span><br><span class="line">        results = connSkt.recv(100)</span><br><span class="line">        print(&quot;tcp open port:&quot; + str(port))</span><br><span class="line">        print(&#x27;[+] &#x27; + str(results)) </span><br><span class="line">    except:</span><br><span class="line">        print(&#x27;tcp closed:&#x27;+str(port))</span><br><span class="line">def portScan(tgtHost, tgtPorts):    </span><br><span class="line">    try:        </span><br><span class="line">        tgtIP = socket.gethostbyname(tgtHost)  </span><br><span class="line">    except:        </span><br><span class="line">        print(&quot;[-] Cannot resolve &#x27;%s&#x27;: Unknown host&quot; % tgtHost)        </span><br><span class="line">        return   </span><br><span class="line">    try:        </span><br><span class="line">        tgtName = socket.gethostbyaddr(tgtIP)       </span><br><span class="line">        print(&#x27;\n[+] Scan Results for: &#x27; + tgtName[0])</span><br><span class="line">    except:        </span><br><span class="line">        print(&#x27;\n[+] Scan Results for: &#x27; + tgtIP)</span><br><span class="line">    socket.setdefaulttimeout(1)    </span><br><span class="line">    for tgtPort in tgtPorts:        </span><br><span class="line">        print(&#x27;Scanning port &#x27; + str(tgtPort))        </span><br><span class="line">        connScan(tgtHost, int(tgtPort))</span><br><span class="line">portScan(&#x27;www.qq.com&#x27;, [22,80,443,3389,1433,23,445])</span><br></pre></td></tr></table></figure>
+<h3 id="多线程进行扫描"><a href="#多线程进行扫描" class="headerlink" title="多线程进行扫描"></a><strong>多线程进行扫描</strong></h3><p>因为每一个socket都有时间延迟，每一个socket扫描都将会耗时几秒钟，虽 然看起来无足轻重，但是如果我们扫描多个端口和主机延迟时间将迅速增大。 理想情况下，我们希望这些socket按顺序扫描。引入Python线程。线程提供 了一种同时执行的方式。在我们的扫描中利用线程，只需将 portScan()函数的迭代改一下。请注意，我们可以把每一个connScan()函数都 当做是一个线程。在迭代的过程中产生的每一个线程将在同时执行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">for tgtPort in tgtPorts:</span><br><span class="line">    print(&#x27;Scanning port &#x27; + str(tgtPort))</span><br><span class="line">    t = threading.Thread(target=connScan, args=(tgtHost,</span><br><span class="line">    int(tgtPort)))</span><br><span class="line">    t.start()</span><br></pre></td></tr></table></figure>
+<h3 id="使用namp"><a href="#使用namp" class="headerlink" title="使用namp"></a><strong>使用namp</strong></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import nmap</span><br><span class="line">def nmapScan(tgtHost, tgtPort):</span><br><span class="line">    nmScan = nmap.PortScanner()</span><br><span class="line">    results = nmScan.scan(tgtHost, tgtPort)</span><br><span class="line">    state = results[&#x27;scan&#x27;][tgtHost][&#x27;tcp&#x27;][int(tgtPort)][&#x27;state&#x27;]</span><br><span class="line">    print(&quot; [*] &quot; + tgtHost + &quot; tcp/&quot; + tgtPort + &quot; &quot; + state)</span><br><span class="line">    nmapScan(&#x27;10.108.x.x&#x27;,&#x27;8080&#x27;)</span><br></pre></td></tr></table></figure>
+        </div>
+
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+<nav class="article-nav">
+  
+    <a href="/2023/01/03/post1-5/" id="article-nav-newer" class="article-nav-link-wrap">
+      <div class="article-nav-caption">次の記事</div>
+      <div class="article-nav-title">
+        
+          python实现远程开机关机
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2022/12/16/post1-3/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-caption">前の記事</div>
+      <div class="article-nav-title">python 构建SSH僵尸网络</div>
+    </a>
+  
+</nav>
+
+
+    <section class="share">
+        <div class="share-title">シェア</div>
+        <a class="share-item" target="_blank"
+            href="https://twitter.com/share?text=端口扫描工具 - &url=http%3A%2F%2Fexample.com%2F2023%2F01%2F03%2Fpost1-4%2F">
+            <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a class="share-item" target="_blank"
+            href="https://www.facebook.com/sharer.php?title=端口扫描工具 - &u=http%3A%2F%2Fexample.com%2F2023%2F01%2F03%2Fpost1-4%2F">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <!-- <a class="share-item" target="_blank"
+            href="https://service.weibo.com/share/share.php?title=端口扫描工具 - &url=http://example.com/2023/01/03/post1-4/&pic=">
+            <div class="n-icon n-icon-weibo"></div>
+        </a> -->
+    </section>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+                </section>
+            </section>
+
+            
+            <aside class="sidebar ">
+                
+
+
+<div class="widget" id="widget">
+    
+      
+  <div class="widget-wrap">
+    <div class="widget-inner">
+      <div class="toc post-toc-html"></div>
+    </div>
+  </div>
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-tags">
+    <div class="widget-title"><span>Tags</span></div>
+    <div class="widget-inner">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python%E5%B0%8F%E6%8A%80%E5%B7%A7/" rel="tag">Python小技巧</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python%E9%BB%91%E7%A7%91%E6%8A%80/" rel="tag">python黑科技</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B8%97%E9%80%8F%E6%8A%80%E6%9C%AF/" rel="tag">渗透技术</a></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget-wrap widget-recent-posts">
+    <div class="widget-title"><span>Recent Posts</span></div>
+    <div class="widget-inner">
+      <ul>
+        
+          <li>
+            <a href="/2023/01/03/post1-5/">python实现远程开机关机</a>
+          </li>
+        
+          <li>
+            <a href="/2023/01/03/post1-4/">端口扫描工具</a>
+          </li>
+        
+          <li>
+            <a href="/2022/12/16/post1-3/">python 构建SSH僵尸网络</a>
+          </li>
+        
+          <li>
+            <a href="/2022/12/15/post1-2/">python 编写天气查询小工具</a>
+          </li>
+        
+          <li>
+            <a href="/2022/12/15/post-1-1/">python 如何操作word？</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget-wrap widget-archive">
+    <div class="widget-title"><span>Archive</span></div>
+    <div class="widget-inner">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/">2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/">2022</a></li></ul>
+    </div>
+  </div>
+
+
+    
+</div>
+
+<div id="backtop"><i class="icon icon-arrow-up"></i></div>
+            </aside>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#3c4859" fill-opacity="1" d="M0,160L60,181.3C120,203,240,245,360,240C480,235,600,181,720,186.7C840,192,960,256,1080,261.3C1200,267,1320,213,1380,186.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>
+    </div>
+
+    <!-- Please do not remove this -->
+    <!-- 开源不易，请勿删除 -->
+    <div class="footer-wrap">
+        <div class="footer-inner"> 
+             &copy; 2023<br>
+            Powered By Hexo · Theme By <a href="https://linhong.me/" target="_blank">Aomori</a> · <a href="https://github.com/lh1me/hexo-theme-aomori" target="_blank">Github</a>
+        </div>
+    </div>
+
+</footer>
+
+<script type="module" src="https://unpkg.com/ionicons@6.0.2/dist/ionicons/ionicons.esm.js"></script>
+
+
+
+
+
+
+<script src="/dist/build.js?1654266144177.js"></script>
+
+
+<script src="/dist/custom.js?1654266144177.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
